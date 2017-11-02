@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title> Client</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <meta charset="utf-8">
+</head>
+<body>
+    <div>
+        <input type="text" id="client_message" >
+		<div id="server_message"></div>
+    </div>
+    <script>
+		document.getElementById("client_message").addEventListener("keyup", function(event) {
+			event.preventDefault();
+			if (event.keyCode === 13) {
+				SendMessage();
+			}
+		});
+	
+		var host = "ws://localhost:8888/ws"; 	
+        var socket = new WebSocket(host);
+		if (socket) {
+			function SendMessage(){
+				var sent_msg = document.getElementById('client_message').value;
+				socket.send(msg);
+			}
+			socket.onopen = function(){
+				document.getElementById('server_message').value="Connection opened";
+			}
+			
+			socket.onmessage = function (msg) {
+                document.getElementById('server_message').value=msg.data;
+                }
+            socket.onclose = function () {
+                document.getElementById('server_message').value="Connection closed";
+                }
+        }
+			
+    </script>
+</body>
+</html>
+<script>
+
+    jQuery(function ($) {
+        if (!("WebSocket" in window)) {
+            alert("Your browser does not support web sockets");
+        }
+    });
+
+</script>
